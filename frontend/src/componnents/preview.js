@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import Form from "react-bootstrap/Form";
 import style from "../style.module.css";
+import svgData from "./svgMock";
+
+const magicConstantScale = 1.6;
+const magicConstantOffset = 2.6;
 
 function minMax(holes) {
   if (holes.length === 0) {
@@ -68,6 +72,14 @@ export default function Preview(props) {
     <div className={style.bordered}>
       <h2>Preview</h2>
       <svg width="100%" height="70vh" className={style.svgCanvas} ref={canvas}>
+        <g opacity={0.5} transform={"translate(" + (-offsets.x*scale + 10) + "," + (-offsets.y*scale + 10) + ")"}>
+          <g
+            transform={"scale(" + scale*0.00254 + "," + scale*0.00254 + ")"}
+            strokeWidth={10}
+            dangerouslySetInnerHTML={{ __html: svgData }}
+          ></g>
+        </g>
+
         {data.holes.map((h, i) => {
           return (
             <circle
@@ -75,7 +87,7 @@ export default function Preview(props) {
               className={style.hole}
               cx={(h.x - offsets.x) * scale + 10}
               cy={(h.y - offsets.y) * scale + 10}
-              r={h.d * scale}
+              r={h.d * scale * 0.5}
             />
           );
         })}

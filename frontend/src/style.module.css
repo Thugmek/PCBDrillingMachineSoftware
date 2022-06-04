@@ -8,13 +8,12 @@
 }
 
 .svgCanvas{
-    background-color:lightslategrey;
+    background-color:rgb(4, 0, 36);
 }
 
 .hole{
-    fill: gray;
-    stroke: darkslategray;
-    stroke-width: 4px;
+    fill: lime;
+    stroke-width: 0px;
 }
 
 .hole:hover{
