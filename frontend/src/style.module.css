@@ -1,0 +1,43 @@
+.bordered{
+    border: 3px;
+    border-color: gray;
+    border-style: solid;
+    border-radius: 10px;
+    padding: 10px;
+    
+}
+
+.svgCanvas{
+    background-color:lightslategrey;
+}
+
+.hole{
+    fill: gray;
+    stroke: darkslategray;
+    stroke-width: 4px;
+}
+
+.hole:hover{
+    fill: orangered;
+    stroke: orange;
+    stroke-width: 4px;
+}
+
+.borderedTable td{
+    border: 2px;
+    border-color: gray;
+    border-style:solid;
+    padding: 10px;
+}
+.borderedTable th{
+    border: 2px;
+    border-color: gray;
+    border-style: solid;
+    padding: 10px;
+}
+
+.svgPath{
+    fill: gray;
+    stroke: darkslategray;
+    stroke-width: 4px;
+}
