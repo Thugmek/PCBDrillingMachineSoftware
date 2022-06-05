@@ -1,10 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Form from "react-bootstrap/Form";
 import style from "../style.module.css";
-import svgData from "./svgMock";
-
-const magicConstantScale = 1.6;
-const magicConstantOffset = 2.6;
 
 function minMax(holes) {
   if (holes.length === 0) {
@@ -50,8 +46,8 @@ export default function Preview(props) {
 
     let minMaxRes = minMax(data.holes);
     setOffsets({ x: minMaxRes.xMin, y: minMaxRes.yMin });
-    let sclByX = (newWidth - 20) / (minMaxRes.xMax - minMaxRes.xMin);
-    let sclByY = (newHeight - 20) / (minMaxRes.yMax - minMaxRes.yMin);
+    let sclByX = (newWidth - 200) / (minMaxRes.xMax - minMaxRes.xMin);
+    let sclByY = (newHeight - 200) / (minMaxRes.yMax - minMaxRes.yMin);
 
     setScale(Math.min(sclByX, sclByY));
   }
@@ -72,11 +68,10 @@ export default function Preview(props) {
     <div className={style.bordered}>
       <h2>Preview</h2>
       <svg width="100%" height="70vh" className={style.svgCanvas} ref={canvas}>
-        <g opacity={0.5} transform={"translate(" + (-offsets.x*scale + 10) + "," + (-offsets.y*scale + 10) + ")"}>
+        <g className={style.copper} transform={"translate(" + (-offsets.x*scale + 100) + "," + (-offsets.y*scale + 100) + ")"}>
           <g
             transform={"scale(" + scale*0.00254 + "," + scale*0.00254 + ")"}
-            strokeWidth={10}
-            dangerouslySetInnerHTML={{ __html: svgData }}
+            dangerouslySetInnerHTML={{ __html: data.svg }}
           ></g>
         </g>
 
@@ -85,8 +80,8 @@ export default function Preview(props) {
             <circle
               key={i}
               className={style.hole}
-              cx={(h.x - offsets.x) * scale + 10}
-              cy={(h.y - offsets.y) * scale + 10}
+              cx={(h.x - offsets.x) * scale + 100}
+              cy={(h.y - offsets.y) * scale + 100}
               r={h.d * scale * 0.5}
             />
           );

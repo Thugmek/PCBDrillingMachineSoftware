@@ -8,18 +8,18 @@
 }
 
 .svgCanvas{
-    background-color:rgb(4, 0, 36);
+    background-color:silver;
 }
 
 .hole{
-    fill: lime;
+    fill: black;
     stroke-width: 0px;
 }
 
 .hole:hover{
     fill: orangered;
-    stroke: orange;
-    stroke-width: 4px;
+    stroke:crimson;
+    stroke-width: 10px;
 }
 
 .borderedTable td{
@@ -39,4 +39,10 @@
     fill: gray;
     stroke: darkslategray;
     stroke-width: 4px;
+}
+
+.copper{
+    fill:darkgoldenrod;
+    stroke: darkgoldenrod;
+    stroke-width: 100px;
 }

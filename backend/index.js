@@ -1,5 +1,6 @@
 const { SerialPort } = require("serialport");
 const express = require("express");
+const { XMLParser, XMLBuilder, XMLValidator } = require("fast-xml-parser");
 const app = express();
 
 app.use(express.json({ limit: "50mb" }));
@@ -9,9 +10,7 @@ let currentJob = {};
 
 //API Serial---------------------------------------------------------------------------------
 app.all("/api/serial/list", (req, res) => {
-  console.log("list ports...");
   SerialPort.list().then((e) => {
-    console.log("listed...");
     res.status(200);
     res.send(e);
   });
@@ -64,10 +63,6 @@ app.post("/api/job/upload", (req, res) => {
   let toolNumber = 0;
   let holes = [];
   drlDataRows.forEach((element) => {
-    if (element.charAt(0) === ";") return;
-    if (element.charAt(0) === "%") return;
-    if (element.charAt(0) === "M") return;
-    if (element.charAt(0) === "G") return;
     if (element.charAt(0) === "T") {
       toolNumber = Number(element.charAt(1));
       if (element.charAt(2) === "C")
@@ -76,15 +71,49 @@ app.post("/api/job/upload", (req, res) => {
     }
     if (element.charAt(0) === "X") {
       let cord = element.substring(1).split("Y");
-      holes.push({ x: Number(cord[0]), y: -Number(cord[1]), d: drillBits[toolNumber - 1] });
+      holes.push({
+        x: Number(cord[0]),
+        y: -Number(cord[1]),
+        d: drillBits[toolNumber - 1],
+      });
       return;
     }
-    console.log(element);
   });
-  console.log(drillBits);
-  console.log(holes);
-
   currentJob.holes = holes;
+
+  const parser = new XMLParser({
+    ignoreAttributes: false,
+    attributeNamePrefix: "@_",
+  });
+  let jsonObj = parser.parse(svgData);
+
+  const builder = new XMLBuilder({
+    ignoreAttributes: false,
+    attributeNamePrefix: "@_",
+  });
+  let newSvg = {g: jsonObj.svg.g.map(e => {
+
+    function deleteStyles(obj){
+      delete obj['@_style'];
+
+      for(let key of Object.keys(obj)){
+        if(typeof obj[key] === 'array'){
+          obj[key].forEach(a => deleteStyles(a));
+        }
+        if(typeof obj[key] === 'object'){
+          deleteStyles(obj[key]);
+        }
+      }
+    }
+
+    deleteStyles(e);
+    return e;
+  })};
+
+
+  currentJob.svg = builder.build(newSvg);
+
+  //console.log(currentJob.svg);
 
   res.status(200);
   res.send("ok");
